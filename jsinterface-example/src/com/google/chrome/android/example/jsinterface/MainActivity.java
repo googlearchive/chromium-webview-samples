@@ -120,16 +120,33 @@ public class MainActivity extends Activity {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // In KitKat+ you should use the evaluateJavascript method
             mWebView.evaluateJavascript(javascript, new ValueCallback<String>() {
+                @TargetApi(Build.VERSION_CODES.HONEYCOMB)
                 @Override
                 public void onReceiveValue(String s) {
                     try {
-                        JSONObject jsonObj = new JSONObject(s);
-                        String msg = jsonObj.optString("msg");
-                        if(msg == null) {
+                        // To ensure all results in onReceiveValue can be passed as valid
+                        // JSON we wrap the json value in a json object
+                        // See http://www.json.org/ for details
+                        JSONObject resultObj = new JSONObject("{ \"result\" : "+s+"}");
+                        
+                        // If the result obj is null, then s was "null"
+                        if(resultObj.isNull("result")) {
                             return;
                         }
                         
-                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                        // We are expecting the JS to return a javascript object
+                        // so try and parse as a JSONObject
+                        JSONObject returnObj = resultObj.optJSONObject("result");
+                        if(returnObj == null) {
+                            return;
+                        }
+                        
+                        // Check the json obj has a msg variable and display a toast
+                        // if it does
+                        String msg = returnObj.optString("msg");
+                        if(msg != null) {
+                            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                        }
                     } catch (JSONException e) {
                         // NOOP
                         Log.e("TAG", "JSONException", e);
@@ -137,8 +154,8 @@ public class MainActivity extends Activity {
                 }
             });
         } else {
-            // For pre-KitKat+ you should use loadUrl("javascript://<JS Code Here>");
-            mWebView.loadUrl("javascript://"+javascript);
+            // For pre-KitKat+ you should use loadUrl("javascript:<JS Code Here>");
+            mWebView.loadUrl("javascript:"+javascript);
         }
     }
 
