@@ -1,0 +1,38 @@
+html,body{
+	padding:0;
+	margin:0;
+}
+
+body{
+	width:1200px;
+	background:#fafafa;
+	font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+	color:#333;
+	margin:0 auto;
+	padding:20px;
+}
+
+.flexbox-section{
+	display:-webkit-box;
+	display:-webkit-flex;
+	display:-ms-flexbox;
+	display:flex;
+
+	-webkit-box-orient:horizontal;
+	-webkit-box-direction:normal;
+	-webkit-flex-direction:row;
+	-ms-flex-direction:row;
+	flex-direction:row;
+}
+
+.float-section p{
+	width:49%;
+}
+
+.float-section p:first-child{
+	float:left;
+}
+
+.float-section p:last-child{
+	float:right;
+}
