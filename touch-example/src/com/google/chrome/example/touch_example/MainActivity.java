@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.view.Menu;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -37,7 +36,7 @@ public class MainActivity extends Activity {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void setUpWebViewDefaults(WebView webView) {
         WebSettings settings = webView.getSettings();
-
+        
         // Enable Javascript
         settings.setJavaScriptEnabled(true);
 
@@ -51,6 +50,11 @@ public class MainActivity extends Activity {
         if(Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB) {
             // Hide the zoom controls for HONEYCOMB+
             settings.setDisplayZoomControls(false);
+        }
+        
+        // Enable remote debugging via chrome://inspect
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WebView.setWebContentsDebuggingEnabled(true);
         }
     }
 

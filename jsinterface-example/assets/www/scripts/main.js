@@ -130,13 +130,14 @@ var animEndEventNames = {
     function showSecretMessage() {
         var ui = getSecretUI();
         if(ui.classList.contains('current-page')) {
+        	if(animating) {
+        		return;
+        	}
             window.history.back();
         } else {
             changeState(SECRET_SCREEN);
 
-            return {
-                msg: 'You Found the Secret'
-            };
+            return 'You Found the Secret';
         }
     }
 

@@ -1,8 +1,5 @@
 package com.google.chrome.android.example.jsinterface;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -10,6 +7,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.JsonReader;
+import android.util.JsonToken;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +20,9 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+
+import java.io.IOException;
+import java.io.StringReader;
 
 @SuppressLint("SetJavaScriptEnabled")
 public class MainActivity extends Activity {
@@ -43,8 +45,6 @@ public class MainActivity extends Activity {
         
         // Add Javascript Interface
         mWebView.addJavascriptInterface(mNotificationBindObject, "NotificationBind");
-        
-        mWebView.clearCache(true);
         
         setUpWebViewDefaults(mWebView);
         
@@ -122,34 +122,29 @@ public class MainActivity extends Activity {
             mWebView.evaluateJavascript(javascript, new ValueCallback<String>() {
                 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
                 @Override
-                public void onReceiveValue(String s) {
+                public void onReceiveValue(String s) {           
+                    JsonReader reader = new JsonReader(new StringReader(s));
+                    
+                    // Must set lenient to parse single values
+                    reader.setLenient(true);
+                    
                     try {
-                        // To ensure all results in onReceiveValue can be passed as valid
-                        // JSON we wrap the json value in a json object
-                        // See http://www.json.org/ for details
-                        JSONObject resultObj = new JSONObject("{ \"result\" : "+s+"}");
-                        
-                        // If the result obj is null, then s was "null"
-                        if(resultObj.isNull("result")) {
-                            return;
+                        if(reader.peek() != JsonToken.NULL) {
+                            if(reader.peek() == JsonToken.STRING) {
+                                String msg = reader.nextString();
+                                if(msg != null) {
+                                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                                }
+                            }
                         }
-                        
-                        // We are expecting the JS to return a javascript object
-                        // so try and parse as a JSONObject
-                        JSONObject returnObj = resultObj.optJSONObject("result");
-                        if(returnObj == null) {
-                            return;
+                    } catch (IOException e) {
+                        Log.e("TAG", "MainActivity: IOException", e);
+                    } finally {
+                        try {
+                            reader.close();
+                        } catch (IOException e) {
+                            // NOOP
                         }
-                        
-                        // Check the json obj has a msg variable and display a toast
-                        // if it does
-                        String msg = returnObj.optString("msg");
-                        if(msg != null) {
-                            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-                        }
-                    } catch (JSONException e) {
-                        // NOOP
-                        Log.e("TAG", "JSONException", e);
                     }
                 }
             });
@@ -168,7 +163,7 @@ public class MainActivity extends Activity {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void setUpWebViewDefaults(WebView webView) {
         WebSettings settings = webView.getSettings();
-
+        
         // Enable Javascript
         settings.setJavaScriptEnabled(true);
 
@@ -177,11 +172,16 @@ public class MainActivity extends Activity {
         settings.setLoadWithOverviewMode(true);
 
         // Enable pinch to zoom without the zoom buttons
-        settings.setSupportZoom(true);
+        settings.setBuiltInZoomControls(true);
 
         if(Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB) {
             // Hide the zoom controls for HONEYCOMB+
             settings.setDisplayZoomControls(false);
+        }
+        
+        // Enable remote debugging via chrome://inspect
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WebView.setWebContentsDebuggingEnabled(true);
         }
     }
 
