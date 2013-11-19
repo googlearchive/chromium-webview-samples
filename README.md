@@ -26,3 +26,16 @@ The *web-touch-example* contains a simple app which uses touch to move an elemen
 <p align="center">
 <img src="http://i.imgur.com/ffz4gkV.png" alt="Image of WebView Touch Example" />
 </p>
+
+##JS Interface in the WebView
+
+This example demonstrates the following:
+
+  * Using evaluateJavascript()
+  * Adding a javascript interface
+  * Hiding the white flash of the WebView load
+  * Saving state of the WebView
+ 
+<p align="center">
+<img src="http://i.imgur.com/iL4aB0r.png" alt="Image of WebView JS Interface" />
+</p>
