@@ -24,8 +24,8 @@ moment the example is using the new permission request API in WebChromeClient:
         }
     });
 
-In the final version of L this should change to the preauthorizePermission for a 
-specific URI (At the moment this method is not working).
+In the final version of this example should change with the launch of L to use the
+preauthorizePermission method (At the moment this method is not working).
 
 [WebRTC on the Chrome WebView Example](http://i.imgur.com/AUYL7dK.png)
 
