@@ -146,7 +146,11 @@ public class MainActivity extends Activity
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            request.grant(request.getResources());
+                            if(request.getOrigin().toString().equals("https://apprtc-m.appspot.com/")) {
+                                request.grant(request.getResources());
+                            } else {
+                                request.deny();
+                            }
                         }
                     });
                 }
