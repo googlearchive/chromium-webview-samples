@@ -19,6 +19,7 @@
  * interface "window.NotificationBind"
  */
 window.onload = function() {
+    console.log('window.onload');
     var showNotificationBtn = document.querySelector('#show-notification-btn');
     showNotificationBtn.addEventListener('click', function() {
         if(window.NotificationBind) {
@@ -27,6 +28,8 @@ window.onload = function() {
 
         changeState(NOTIFICATION_SHOWN, true);
     });
+
+    updateUI(true);
 };
 
 /**
@@ -54,6 +57,8 @@ var currentState;
 var animating = false;
 
 function changeState(newState, animateForward) {
+    console.log('changeState()');
+
     if(animating || (newState == currentState)) {
         return;
     }
@@ -135,6 +140,7 @@ function getSecretUI() {
 }
 
 function updateUI(animateForward) {
+    console.log('updateUI()');
     var identifier = window.location.hash;
     var state;
 
@@ -174,6 +180,7 @@ function pushState(state, title, path) {
 }
 
 window.onpopstate = function(event) {
+    console.log('onpopstate()');
     var popped = document.querySelector('.current-page') ? true : false;
     if(popped && currentState == SECRET_SCREEN) {
         popped = false;
