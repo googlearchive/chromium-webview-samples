@@ -67,17 +67,17 @@
   <h1>No Poster Attribute</h1>
   <div class="videoWrapper">
     <video controls>
-      <source src="http://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-      <source src="http://www.w3schools.com/html/mov_bbb.ogg" type="video/ogg">
-      Your browser does not support HTML5 video.
+        <source src="http://simpl.info/video/video/chrome.webm" type="video/webm">
+        <source src="http://simpl.info/video/video/chrome.mp4" type="video/mp4">
+      <p>This browser does not support the video element.</p>
     </video>
   </div>
   
   <h1>Poster Attribute</h1>
   <div class="videoWrapper">
-    <video controls poster="file:///android_asset/www/bbb-splash.png">
-      <source src="http://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-      <source src="http://www.w3schools.com/html/mov_bbb.ogg" type="video/ogg">
+    <video controls poster="file:///android_asset/www/poster.jpg">
+        <source src="http://simpl.info/video/video/chrome.webm" type="video/webm">
+        <source src="http://simpl.info/video/video/chrome.mp4" type="video/mp4">
       Your browser does not support HTML5 video.
     </video>
   </div>
@@ -85,8 +85,8 @@
   <h1>No Controls</h1>
   <div class="videoWrapper">
     <video>
-      <source src="http://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-      <source src="http://www.w3schools.com/html/mov_bbb.ogg" type="video/ogg">
+        <source src="http://simpl.info/video/video/chrome.webm" type="video/webm">
+        <source src="http://simpl.info/video/video/chrome.mp4" type="video/mp4">
       Your browser does not support HTML5 video.
     </video>
     <button class="fullscreenBtn">
@@ -96,12 +96,6 @@
       </svg>
     </button>
   </div>
-  
-  <p>
-  Video and Image courtesy of
-  <a href="http://www.bigbuckbunny.org/" target="_blank">Big Buck Bunny</a>.
-  </p>
-  <p>Blender Foundation | <a href="www.blender.org">www.blender.org</a></p>
 
   <script id="jsbin-javascript">
     var videoWrapperElements = document.querySelectorAll('.videoWrapper');
