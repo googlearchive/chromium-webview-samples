@@ -82,5 +82,5 @@ This demonstrates the use of the onShowFileChooser() method in WebChromeClient
 including how to handle the activity result.
 
 <p align="center">
-<img src="http://i.imgur.com/N1ulaDS.png" alt="Image of File Input Sample" />
+<img src="http://i.imgur.com/0wynCKL.png" alt="Image of File Input Sample" />
 </p>
