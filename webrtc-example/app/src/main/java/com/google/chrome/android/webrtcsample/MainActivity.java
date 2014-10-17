@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -29,6 +30,8 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -138,12 +141,13 @@ public class MainActivity extends Activity
 
             mWebRTCWebView.loadUrl("https://apprtc-m.appspot.com/");
 
-            // This SHOULD be preauthorizePermssion but due to a bug, this is the method we need to use
             mWebRTCWebView.setWebChromeClient(new WebChromeClient() {
 
                 @Override
                 public void onPermissionRequest(final PermissionRequest request) {
+                    Log.d(TAG, "onPermissionRequest");
                     getActivity().runOnUiThread(new Runnable() {
+                        @TargetApi(Build.VERSION_CODES.L)
                         @Override
                         public void run() {
                             if(request.getOrigin().toString().equals("https://apprtc-m.appspot.com/")) {
@@ -161,6 +165,17 @@ public class MainActivity extends Activity
         }
 
         @Override
+        public void onStop() {
+            super.onStop();
+
+            /**
+             * When the application falls into the background we want to stop the media stream
+             * such that the camera is free to use by other apps.
+             */
+            mWebRTCWebView.evaluateJavascript("if(window.localStream){window.localStream.stop();}", null);
+        }
+
+        @Override
         public void onAttach(Activity activity) {
             super.onAttach(activity);
             ((MainActivity) activity).onSectionAttached(
@@ -173,7 +188,7 @@ public class MainActivity extends Activity
          *
          * @param webView
          */
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+        @TargetApi(Build.VERSION_CODES.L)
         private void setUpWebViewDefaults(WebView webView) {
             WebSettings settings = webView.getSettings();
 
@@ -201,6 +216,10 @@ public class MainActivity extends Activity
             }
 
             webView.setWebViewClient(new WebViewClient());
+
+            // AppRTC requires third party cookies to work
+            CookieManager cookieManager = CookieManager.getInstance();
+            cookieManager.setAcceptThirdPartyCookies(mWebRTCWebView, true);
         }
     }
 

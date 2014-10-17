@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 'android-L'
-    buildToolsVersion '20.0'
+    compileSdkVersion 21
+    buildToolsVersion '21.0'
 
     defaultConfig {
         applicationId "com.google.chrome.android.webrtcsample"
-        minSdkVersion "L"
-        targetSdkVersion "L"
+        minSdkVersion 21
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
     }
@@ -22,5 +22,5 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     // You must install or update the Support Repository through the SDK manager to use this dependency.
-    compile 'com.android.support:support-v4:+'
+    compile 'com.android.support:support-v4:21.0.0'
 }
