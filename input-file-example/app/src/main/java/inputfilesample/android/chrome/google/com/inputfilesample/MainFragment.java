@@ -200,7 +200,7 @@ public class MainFragment extends Fragment {
 
         // Check that the response is a good one
         if(resultCode == Activity.RESULT_OK) {
-            if(data == null) {
+            if(data == null || data.getData() == null) {
                 // If there is not data, then we may have taken a photo
                 if(mCameraPhotoPath != null) {
                     results = new Uri[]{Uri.parse(mCameraPhotoPath)};
